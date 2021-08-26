@@ -74,3 +74,12 @@ func TestEmptyBody(t *testing.T) {
 		assert.Equal(t, expected, string(toBeSigned))
 	}
 }
+
+func TestSIgnWithMissingHeader(t *testing.T) {
+
+	req, err := http.NewRequest(http.MethodGet, "https://foo.com:8080/bar?hello=world", nil)
+	require.NoError(t, err)
+
+	_, err = SignablePayload(req.Method, req.URL.Scheme, req.Host, req.URL.RequestURI(), req.Header, nil)
+	assert.Equal(t, ErrorMissingHeader, err)
+}
